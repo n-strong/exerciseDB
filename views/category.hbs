@@ -1,0 +1,57 @@
+<h1>Category Entity</h1>
+<table id="entity-table">
+	<thead>
+		<tr>
+			{{#each data.[0]}}
+			<th>
+				{{@key}}
+			</th>
+			{{/each}}
+			<th>Delete</th>
+		</tr>
+	</thead>
+
+{{!--Table body--}}
+	<tbody>
+		{{#each data}}
+		<tr data-value={{this.category_id}}>
+			<td>{{this.category_id}}</td>
+			<td>{{this.category_name}}</td>
+		<td>
+		<form id="delete-form-{{this.category_id}}" method="POST" action="/delete-entity">
+			<input type="hidden" name="entity_id" value="{{this.category_id}}">
+			<input type="submit" value="Delete" id="delete-entity">
+		</form>
+		</td>		
+		</tr>
+		{{/each}}
+	</tbody>
+</table>
+
+<form id="add-entity-form" method="POST" action="/add-entity-form">
+
+	<label for="input-entity-name">Category Name: </label>
+	<input type="text" name="input-entity-name" id="input-entity-name" minlength="3" maxlength="50">
+
+	<label for="input-entity2">Search: </label>
+	<input type="submit">
+</form>
+<script src="../update_data.js"></script>
+
+<h3>Update files here</h3>
+
+<form id="edit-entity-form" method="POST" action="/edit-entity-form">
+	{{!-- dynamic drop down--}}
+	<select name="input-entity2" id="input-entity2-html" onchange="fetchEntityData()">
+		<option value="">Select Category</option>
+		{{#each data}}
+		<option value="{{this.category_id}}">{{this.category_name}}</option>
+		{{/each}}
+	</select>
+
+	<label for="input-entity-name">Category Name: </label>
+	<input type="text" name="input-entity-name" id="input-entity-name" minlength="3" maxlength="50">
+			
+	<input type="submit">
+</form>
+	

@@ -1,0 +1,57 @@
+<h1>Workout Entity</h1>
+<table id="workout-table">
+	<thead>
+		<tr>
+			{{#each data.[0]}}
+			<th>
+				{{@key}}
+			</th>
+			{{/each}}
+			<th>Delete</th>
+		</tr>
+	</thead>
+
+{{!--Table body--}}
+	<tbody>
+		{{#each data}}
+		<tr data-value={{this.workout_id}}>
+			<td>{{this.workout_id}}</td>
+			<td>{{this.workout_name}}</td>
+			<td>{{this.calorie_count}}</td>
+		<td>
+		<form id="delete-form-{{this.workout_name}}" method="POST" action="/delete-workout">
+			<input type="hidden" name="workout_name" value="{{this.workout_name}}">
+			<input type="submit" value="Delete" id="delete-workout">
+		</form>
+		</td>		
+		</tr>
+		{{/each}}
+	</tbody>
+</table>
+
+<form id="add-workout-form" method="POST" action="/add-workout-form">
+
+	<label for="input-workout-name">Workout Name: </label>
+	<input type="text" name="input-workout-name" id="input-workout-name" minlength="3" maxlength="50">
+	<input type="text" name="input-calorie-count" id="input-calorie-count" pattern="[0-9]+" minlength="1">
+
+	<label for="input-entity2">Search: </label>
+	<input type="submit">
+</form>
+<script src="../update_data.js"></script>
+
+<form id="edit-workout-form" method="POST" action="/edit-workout-form">
+	{{!-- dynamic drop down--}}
+	<select name="input-entity2" id="input-entity2-html" onchange="fetchEntityData()">
+		<option value="">Select Workout</option>
+		{{#each data}}
+		<option value="{{this.workout_id}}">{{this.workout_name}}</option>
+		{{/each}}
+	</select>
+
+	<label for="input-workout-name">Workout Name: </label>
+	<input type="text" name="input-workout-name" id="input-workout-name" minlength="3" maxlength="50">
+	<input type="text" name="input-calorie-count" id="input-calorie-count" pattern="[0-9]+" minlength="1">
+			
+	<input type="submit">
+</form>
