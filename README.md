@@ -1,5 +1,9 @@
-<<<<<<< HEAD
-# RogueAgentsGlobalGym
-=======
-# exerciseDB
->>>>>>> 48f5a4f1d209730fc78c6585d036633ebc412201
+exerciseDB
+
+Description:
+    Web app to track exercises.
+
+Plans:
+    Refactor backend
+    1. Implement ORM instead of raw SQL
+    2. Set up Flask
