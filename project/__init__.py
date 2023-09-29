@@ -1,8 +1,8 @@
 '''
 File to support entities.
 '''
-from flask import Flask as 
-#import sqlalchemy
+from flask import Flask
+
 
 
 def create_app():
