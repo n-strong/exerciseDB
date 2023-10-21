@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Display JSON Data in HTML Table</title>
+</head>
+<body>
+    <table id="myTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Color</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        // Load JSON data from Flask application
+        fetch('/query')
+            .then(response => response.json())
+            .then(data => {
+                // Get table body element
+                const tbody = document.querySelector('tbody');
+
+                // Create data rows
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    const idCell = document.createElement('td');
+                    const nameCell = document.createElement('td');
+                    const categoryCell = document.createElement('td');
+                    const colorCell = document.createElement('td');
+
+                    idCell.textContent = item.id;
+                    nameCell.textContent = item.name;
+                    categoryCell.textContent = item.category;
+                    colorCell.textContent = item.color;
+
+                    row.appendChild(idCell);
+                    row.appendChild(nameCell);
+                    row.appendChild(categoryCell);
+                    row.appendChild(colorCell);
+
+                    tbody.appendChild(row);
+                });
+            });
+    </script>
+</body>
+</html>
+
