@@ -1,7 +1,7 @@
 '''
 File to support entities.
 '''
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template
 import mysql.connector
 # from database import db_connect
 
@@ -9,7 +9,7 @@ import mysql.connector
 app = Flask(__name__)
 
 @app.route('/')
-def read():
+def home():
     cnx = mysql.connector.connect(user='root', password='brain5075', host='127.0.0.1', database='world')
     
     cursor = cnx.cursor()
@@ -18,7 +18,7 @@ def read():
     query = ('SELECT * FROM city')
     cursor.execute(query)
     
-    results=cursor.fetchall()
+    results = cursor.fetchall()
     
     cursor.close()
     cnx.close()
