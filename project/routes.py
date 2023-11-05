@@ -3,7 +3,13 @@ File to support entities.
 '''
 from flask import Flask, render_template, jsonify, request
 
-from models import Workouts, Exercise, Equipment, Category, Workouts_have_Exercises, Exercises_have_Equipment, Exercises_have_Categories, db
+from models import Workouts, Exercise, Equipment, Category
+
+from association import Workouts_have_Exercises, Exercises_have_Equipment, Exercises_have_Categories
+
+from flask_sqlalchemy import SQLAlchemy
+
+from database import db as db
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:brain5075@localhost/exerciseDB'

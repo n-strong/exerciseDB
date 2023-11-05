@@ -1,7 +1,3 @@
--- Authors:Noah Strong and Anthony Frusti
--- Create the database for RogueAgentsGlobal 
--- Table structure for Workouts entity and necessary attributes
-
 CREATE TABLE Workouts (
     workout_id INT AUTO_INCREMENT PRIMARY KEY,
     workout_name VARCHAR(50) NOT NULL,
