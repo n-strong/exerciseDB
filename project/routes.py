@@ -12,7 +12,7 @@ from flask_sqlalchemy import SQLAlchemy
 from database import db as db
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:brain5075@localhost/exerciseDB'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://root:brain5075@localhost/exerciseDB'
 
 db.init_app(app)
 
@@ -32,6 +32,7 @@ def submit_exercise():
         exercise = Exercise(exercise_name=data['exercise_name'])
         equipment = Equipment(equipment_name=data['equipment_name'])
         workout = Workouts(workout_name=data['exercise_type'], calorie_count=data['calorie_count'])
+        category = Category(category_name=data['category'])
         
         # many to many relationships
         exercise.equipment.append(equipment)
@@ -40,6 +41,7 @@ def submit_exercise():
         db.session.add(exercise)
         db.session.add(equipment)
         db.session.add(workout)
+        db.session.add(category)
         db.session.commit()
         
         return jsonify({'message': 'Exercise data saved successfully'})

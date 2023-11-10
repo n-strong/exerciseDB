@@ -3,11 +3,13 @@ exerciseDB
 Description:
     Web app to track exercises.
 
-Plans:
-    Refactor backend
-    1. Implement ORM instead of raw SQL
-    2. Set up Flask
-
-
-in progress:
-    SSH into oracle instance and create new user so that i connect flask server
+Roadmap 11/9:
+    1. Fix Category entity
+    2. Fix junction tables or refactor database schema.
+    3. Add tests.
+    4. Add frontend framework.
+    5. Docker?
+    6. Put app into production environment.
+    7. Add export feature.
+    8. Add dashboard to visualize data.
+    9. Add user feature.

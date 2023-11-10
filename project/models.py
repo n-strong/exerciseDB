@@ -6,16 +6,18 @@ from database import db as db
 
 class Workouts(db.Model):
     __tablename__ = 'Workouts'
-    workout_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    workout_id = db.Column('workout_id', db.Integer, primary_key=True, autoincrement=True)
+    
     workout_name = db.Column(db.String(50), nullable=False)
+    
     calorie_count = db.Column(db.BigInteger, nullable=False)
     
     exercises = relationship('Exercise', secondary=Workouts_have_Exercises, back_populates='workouts')    
     
 class Exercise(db.Model):
     __tablename__ = 'Exercise'
-
-    exercise_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    exercise_id = db.Column('exercise_id', db.Integer, primary_key=True, autoincrement=True)
+    
     exercise_name = db.Column(db.String(50), nullable=False)
     
     equipment = relationship('Equipment', secondary=Exercises_have_Equipment, back_populates="exercises")
@@ -27,17 +29,19 @@ class Exercise(db.Model):
 class Category(db.Model):
     __tablename__ = 'Category'
 
-    category_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    category_name = db.Column(db.String(50))
+    category_id = db.Column('category_id',db.Integer, primary_key=True, autoincrement=True)
+    
+    category_name = db.Column(db.String(50), nullable=True)
     
     exercises = relationship('Exercise', secondary=Exercises_have_Categories, back_populates='category')
     
     
 class Equipment(db.Model):
     __tablename__ = 'Equipment'
-    equipment_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    equipment_id = db.Column('equipment_id', db.Integer, primary_key=True, autoincrement=True)
    
     equipment_name = db.Column(db.String(50), nullable=False)
+    
     exercises = relationship('Exercise',
     secondary=Exercises_have_Equipment, back_populates="equipment")
 
