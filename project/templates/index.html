@@ -20,7 +20,7 @@
         <input type="number" id="calories-burned" name="calorie_count" required><br>
 
         <label for="category">Exercise Type:</label>
-        <select id="category" name="exercise_type" required>
+        <select id="category" name="category" required>
             <option value="Cardio">Cardio</option>
             <option value="Strength Training">Strength Training</option>
             <option value="Stretching">Stretching</option>
@@ -37,10 +37,12 @@
             event.preventDefault();
             
             const exerciseData = {
+                workout_name: document.getElementById('workout-name').value,
                 exercise_name: document.getElementById("exercise-name").value,
                 equipment_name: document.getElementById("equipment-name").value,
                 calorie_count: document.getElementById("calories-burned").value,
-                exercise_type: document.getElementById("category").value,
+                category: document.getElementById("category").value,
+                
             };
             
             fetch("/submit_exercise", {

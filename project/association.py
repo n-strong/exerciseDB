@@ -1,4 +1,4 @@
-from database import db as db
+from project.database import db as db
 
 Workouts_have_Exercises = db.Table(
     'Workouts_have_Exercises', db.Model.metadata,

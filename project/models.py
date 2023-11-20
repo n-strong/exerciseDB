@@ -1,8 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
-from association import Workouts_have_Exercises, Exercises_have_Equipment, Exercises_have_Categories
+from project.association import Workouts_have_Exercises, Exercises_have_Equipment, Exercises_have_Categories
 
-from database import db as db
+from project.database import db as db
 
 class Workouts(db.Model):
     __tablename__ = 'Workouts'
