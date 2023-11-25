@@ -23,7 +23,7 @@ with app.app_context():
 def exercise_form():
     return render_template('index.html')
 
-@app.route('/submit_exercise', methods=['POST'])
+@app.route('/submit_exercise', methods=['POST'])  #TODO: change this after implementing star schema
 def submit_exercise():
     if request.method == 'POST':
         data = request.get_json()

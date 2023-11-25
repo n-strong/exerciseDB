@@ -1,3 +1,5 @@
+# TODO: delete this after implementing star schema
+
 from project.database import db as db
 
 Workouts_have_Exercises = db.Table(

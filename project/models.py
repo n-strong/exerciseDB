@@ -1,7 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from project.association import Workouts_have_Exercises, Exercises_have_Equipment, Exercises_have_Categories
-
 from project.database import db as db
 
 class Workouts(db.Model):
@@ -14,6 +13,7 @@ class Workouts(db.Model):
     
     exercises = relationship('Exercise', secondary=Workouts_have_Exercises, back_populates='workouts')    
     
+    
 class Exercise(db.Model):
     __tablename__ = 'Exercise'
     exercise_id = db.Column('exercise_id', db.Integer, primary_key=True, autoincrement=True)
@@ -25,6 +25,7 @@ class Exercise(db.Model):
     workouts=relationship('Workouts', secondary=Workouts_have_Exercises, back_populates='exercises')
     
     category = relationship('Category', secondary=Exercises_have_Categories, back_populates='exercises')
+
 
 class Category(db.Model):
     __tablename__ = 'Category'
@@ -44,4 +45,6 @@ class Equipment(db.Model):
     
     exercises = relationship('Exercise',
     secondary=Exercises_have_Equipment, back_populates="equipment")
+    
+# TODO add a 'facts' table to create a star schema
 
