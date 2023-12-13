@@ -1,24 +1,51 @@
 '''
 This is the test suite for the exerciseDB web app backend that uses Flask.
 '''
-import os
+import pytest
 import sys
 
 project_dir = r'C:\Users\nsstr\OneDrive\Computer Science\personal projects\exerciseDB'
 
 sys.path.append(project_dir)
 
-from project.routes import app, db
+from project.routes import db, app
 from project.models import Exercise, Equipment, Workouts, Category
+from project.create_db import create_app
 
-def test_home():
-    with app.test_client() as client:
+class TestExerciseDatabase:
+    
+    #adding pytest classes here. Trying to break test framework into smaller units
+    # @classmethod
+    def test_datebase_creation():
+        cursor, database_list = create_app('test_database')
+        print(database_list)
+        assert 'test_database' in database_list
+    
+    
+    #TODO: trying to create test database
+    @pytest.fixture(scope='session')
+    def test_app():
+        app.config['TESTING'] = True
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://root:brain5075@localhost/test_database'
+        
+        with app.app_context():  # not sure what this does
+            yield app
+    
+    
+    #TODO: not sure if this is relevant
+    @pytest.fixture
+    def client():
+        with app.test_client() as client:
+            yield client
+            
+
+            
+    def test_home(client):
         response = client.get('/')
         assert response.status_code == 200 
         assert b'id="exercise-form"' in response.data
-        
-def test_database():
-    with app.test_client() as client:
+            
+    def test_database_submission(client):
         test_data = {
             'exercise_name': 'Incline Bench Press',
             'equipment_name': 'Barbell',
@@ -57,8 +84,9 @@ def test_database():
         assert Category.query.filter_by(category_name='Chest').first() is None
         
 def main():
-    test_home()
-    test_database()
+    TestExerciseDatabase.setup()
+    # test_home()
+    # test_database()
     
     print('All tests successful\n')
     

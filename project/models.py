@@ -1,18 +1,14 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
-from project.association import Workouts_have_Exercises, Exercises_have_Equipment, Exercises_have_Categories
+# from project.association import Workouts_have_Exercises, Exercises_have_Equipment, Exercises_have_Categories
+import sys
+
+project_dir = r'C:\Users\nsstr\OneDrive\Computer Science\personal projects\exerciseDB'
+
+sys.path.append(project_dir)
+
 from project.database import db as db
 
-class Workouts(db.Model):
-    __tablename__ = 'Workouts'
-    workout_id = db.Column('workout_id', db.Integer, primary_key=True, autoincrement=True)
-    
-    workout_name = db.Column(db.String(50), nullable=False)
-    
-    calorie_count = db.Column(db.BigInteger, nullable=False)
-    
-    exercises = relationship('Exercise', secondary=Workouts_have_Exercises, back_populates='workouts')    
-    
     
 class Exercise(db.Model):
     __tablename__ = 'Exercise'
@@ -20,11 +16,11 @@ class Exercise(db.Model):
     
     exercise_name = db.Column(db.String(50), nullable=False)
     
-    equipment = relationship('Equipment', secondary=Exercises_have_Equipment, back_populates="exercises")
+    # equipment = relationship('Equipment', secondary=Exercises_have_Equipment, back_populates="exercises")
     
-    workouts=relationship('Workouts', secondary=Workouts_have_Exercises, back_populates='exercises')
+    # workouts=relationship('Workouts', secondary=Workouts_have_Exercises, back_populates='exercises')
     
-    category = relationship('Category', secondary=Exercises_have_Categories, back_populates='exercises')
+    # category = relationship('Category', secondary=Exercises_have_Categories, back_populates='exercises')
 
 
 class Category(db.Model):
@@ -34,7 +30,7 @@ class Category(db.Model):
     
     category_name = db.Column(db.String(50), nullable=True)
     
-    exercises = relationship('Exercise', secondary=Exercises_have_Categories, back_populates='category')
+    # exercises = relationship('Exercise', secondary=Exercises_have_Categories, back_populates='category')
     
     
 class Equipment(db.Model):
@@ -43,8 +39,26 @@ class Equipment(db.Model):
    
     equipment_name = db.Column(db.String(50), nullable=False)
     
-    exercises = relationship('Exercise',
-    secondary=Exercises_have_Equipment, back_populates="equipment")
     
-# TODO add a 'facts' table to create a star schema
+class Workouts(db.Model):
+    __tablename__ = 'Workouts'
+    workout_id = db.Column('workout_id', db.Integer, primary_key=True, autoincrement=True)
+    
+    workout_name = db.Column(db.String(50), nullable=False)
+    
+    calorie_count = db.Column(db.BigInteger, nullable=False)
+    
+    exercise_id = db.Column(db.Integer, db.ForeignKey('Exercise.exercise_id'))
+    category_id = db.Column(db.Integer, db.ForeignKey('Category.category_id'))
+    equipment_id = db.Column(db.Integer, db.ForeignKey('Equipment.equipment_id'))
+    
+    
+    # TODO: fix foreign keys
+    exercise = relationship('Exercise', foreign_keys=[exercise_id], backref='Workouts')
+    category = relationship('Category', foreign_keys=[category_id], backref='Workouts')
+    equipment = relationship('Equipment', foreign_keys=[equipment_id], backref='Workouts')
+    # exercises = relationship('Exercise',
+    # secondary=Exercises_have_Equipment, back_populates="equipment")
+    
+    
 

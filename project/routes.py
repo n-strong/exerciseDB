@@ -3,6 +3,10 @@ File to support entities.
 '''
 from flask import Flask, render_template, jsonify, request
 
+import sys
+project_dir = r'C:\Users\nsstr\OneDrive\Computer Science\personal projects\exerciseDB'
+sys.path.append(project_dir)
+
 from project.models import Workouts, Exercise, Equipment, Category
 
 from project.association import Workouts_have_Exercises, Exercises_have_Equipment, Exercises_have_Categories
@@ -16,6 +20,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://root:brain5075@localhos
 
 db.init_app(app)
 
+# add tables to database
+#TODO: move this function to create_db.py
 with app.app_context():
     db.create_all()
 
@@ -33,20 +39,25 @@ def submit_exercise():
         equipment = Equipment(equipment_name=data['equipment_name'])
         workout = Workouts(workout_name=data['workout_name'], calorie_count=data['calorie_count'])
         category = Category(category_name=data['category'])
-        
-        # many to many relationships
-        exercise.equipment.append(equipment)
-        workout.exercises.append(exercise)
-        exercise.category.append(category)
-
-        db.session.add(exercise)
-        db.session.add(equipment)
-        db.session.add(workout)
-        db.session.add(category)
-        db.session.commit()
+    
+        # add entities to database
+        add_workout(exercise)      
+        add_workout(equipment)
+        add_workout(workout)
+        add_workout(category)
+        commit_workout()
         
         return jsonify({'message': 'Exercise data saved successfully'})
-        
+    
+def add_workout(table):
+    db.session.add(table)
+    
+def delete_exercise(table):
+    db.session.delete(table)
+
+def commit_workout():
+    db.session.commit()
+    
 if __name__ == '__main__':
     app.run(port=3309, debug=True)
     
