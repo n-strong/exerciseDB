@@ -14,6 +14,9 @@ from project.create_db import create_app
 
 #adding pytest classes here. Trying to break test framework into smaller unit   
 
+def test_create_app():
+    cursor, database_list = create_app('test_database')
+    assert 'test_database' in database_list
 
 @pytest.fixture(scope='session')
 def test_app():
@@ -39,6 +42,7 @@ def test_status_code(response):
     
 def test_home(response):
     assert b'id="exercise-form"' in response.data
+
             
     # def test_database_submission(client):
     #     test_data = {

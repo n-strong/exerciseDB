@@ -1,8 +1,14 @@
-import mysql.connector
-from database import db
+import pymysql
+import sys
+project_dir = r'C:\Users\nsstr\OneDrive\Computer Science\personal projects\exerciseDB'
+sys.path.append(project_dir)
 
+from project.database import db
+
+
+# TODO: test if database_name already exists in schema, if not then create database, if yes then skip
 def create_app(database_name: str):
-    cnx = mysql.connector.connect(user='root', password='brain5075', host='127.0.0.1')
+    cnx = pymysql.connect(user='root', password='brain5075', host='127.0.0.1')
 
     cursor = cnx.cursor()
 

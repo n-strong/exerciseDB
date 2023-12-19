@@ -15,8 +15,12 @@ from flask_sqlalchemy import SQLAlchemy
 
 from project.database import db as db
 
+from project.create_db import create_app
+
+create_app('exercisedb')
+
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://root:brain5075@localhost/exerciseDB'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://root:brain5075@localhost/exercisedb'
 
 db.init_app(app)
 
