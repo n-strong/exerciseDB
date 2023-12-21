@@ -10,18 +10,21 @@ sys.path.append(project_dir)
 
 from project.routes import db, app
 from project.models import Exercise, Equipment, Workouts, Category
-from project.create_db import create_app
+from project.create_db import create_app, check_db
 
 #adding pytest classes here. Trying to break test framework into smaller unit   
 
+database_name = 'test_database'
+
 def test_create_app():
-    cursor, database_list = create_app('test_database')
-    assert 'test_database' in database_list
+
+    create_app(database_name)
+    assert check_db(database_name) is True
 
 @pytest.fixture(scope='session')
 def test_app():
     # app.config['TESTING'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://root:brain5075@localhost/test_database'
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqldb://root:brain5075@localhost/{database_name}'
     
     with app.app_context():
         yield app
@@ -43,20 +46,19 @@ def test_status_code(response):
 def test_home(response):
     assert b'id="exercise-form"' in response.data
 
-            
-    # def test_database_submission(client):
-    #     test_data = {
-    #         'exercise_name': 'Incline Bench Press',
-    #         'equipment_name': 'Barbell',
-    #         'workout_name': 'Push Day',
-    #         'calorie_count': 100,
-    #         'category': 'Chest'
-    #     }
         
-    #     response = client.post('/submit_exercise', json=test_data)
-        
-    #     assert response.status_code == 200
-    #     assert response.json['message'] == 'Exercise data saved successfully'
+def test_database_submission(test_client):
+    test_data = {
+        'exercise_name': 'Incline Bench Press',
+        'equipment_name': 'Barbell',
+        'workout_name': 'Push Day',
+        'calorie_count': 100,
+        'category': 'Chest'
+    }
+    
+    response = test_client.post('/submit_exercise', json=test_data)
+    
+    assert response.json['message'] == 'Exercise data saved successfully'
         
         
     #     exercise = Exercise.query.filter_by(exercise_name = 'Incline Bench Press').first()

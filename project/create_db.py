@@ -5,22 +5,28 @@ sys.path.append(project_dir)
 
 from project.database import db
 
-
-# TODO: test if database_name already exists in schema, if not then create database, if yes then skip
-def create_app(database_name: str):
+def establish_connection():
     cnx = pymysql.connect(user='root', password='brain5075', host='127.0.0.1')
 
     cursor = cnx.cursor()
+    return cursor
 
+
+def create_app(database_name: str):
+    cursor = establish_connection()
     cursor.execute(f"CREATE DATABASE {database_name}")
 
+
+def check_db(database_name: str):
+    cursor = establish_connection()
     cursor.execute('SHOW DATABASES')
     
     database_list = [db[0] for db in cursor]
     
-    # add_tables()
+    if database_name in database_list:
+        return True
     
-    return cursor, database_list
+    return False
 
 
 
