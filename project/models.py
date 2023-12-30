@@ -9,6 +9,8 @@ sys.path.append(project_dir)
 
 from project.database import db as db
 
+
+#TODO: FUCK THE ORM
     
 class Exercise(db.Model):
     __tablename__ = 'Exercise'
@@ -43,22 +45,22 @@ class Equipment(db.Model):
 class Workouts(db.Model):
     __tablename__ = 'Workouts'
     workout_id = db.Column('workout_id', db.Integer, primary_key=True, autoincrement=True)
-    
     workout_name = db.Column(db.String(50), nullable=False)
-    
     calorie_count = db.Column(db.BigInteger, nullable=False)
-    
+
+
+class WorkoutSessions(db.Model):
+    __tablename__ = 'WorkoutSessions'
+    workout_id = db.Column(db.Integer, db.ForeignKey('Workouts.workout_id'), primary_key=True)
     exercise_id = db.Column(db.Integer, db.ForeignKey('Exercise.exercise_id'))
     category_id = db.Column(db.Integer, db.ForeignKey('Category.category_id'))
     equipment_id = db.Column(db.Integer, db.ForeignKey('Equipment.equipment_id'))
-    
-    
-    # TODO: fix foreign keys
-    exercise = relationship('Exercise', foreign_keys=[exercise_id], backref='Workouts')
-    category = relationship('Category', foreign_keys=[category_id], backref='Workouts')
-    equipment = relationship('Equipment', foreign_keys=[equipment_id], backref='Workouts')
-    # exercises = relationship('Exercise',
-    # secondary=Exercises_have_Equipment, back_populates="equipment")
+
+    # Define relationships
+    workout = db.relationship('Workouts', backref=db.backref('workout_sessions', cascade='all, delete-orphan'))
+    exercise = db.relationship('Exercise', foreign_keys=[exercise_id])
+    category = db.relationship('Category', foreign_keys=[category_id])
+    equipment = db.relationship('Equipment', foreign_keys=[equipment_id])
     
     
 

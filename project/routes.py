@@ -9,28 +9,16 @@ sys.path.append(project_dir)
 
 from project.models import Workouts, Exercise, Equipment, Category
 
-from project.association import Workouts_have_Exercises, Exercises_have_Equipment, Exercises_have_Categories
+# from project.association import Workouts_have_Exercises, Exercises_have_Equipment, Exercises_have_Categories
 
 from flask_sqlalchemy import SQLAlchemy
 
 from project.database import db as db
 
-from project.create_db import create_app, check_db
-
-database_name = 'exercisedb'
+from project.create_db import create_app, check_db, app, database_name, add_entry
 
 if not check_db(database_name):
     create_app(database_name)
-
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqldb://root:brain5075@localhost/{database_name}'
-
-db.init_app(app)
-
-# add tables to database
-#TODO: move this function to create_db.py
-with app.app_context():
-    db.create_all()
 
 @app.route('/')
 def exercise_form():
@@ -40,7 +28,7 @@ def exercise_form():
 def submit_exercise():
     if request.method == 'POST':
         data = request.get_json()
-        
+
         #create new entries
         exercise = Exercise(exercise_name=data['exercise_name'])
         equipment = Equipment(equipment_name=data['equipment_name'])
@@ -48,20 +36,16 @@ def submit_exercise():
         category = Category(category_name=data['category'])
     
         # add entities to database
-        add_workout(exercise)      
-        add_workout(equipment)
-        add_workout(workout)
-        add_workout(category)
+        add_entry(exercise)      
+        add_entry(equipment)
+        add_entry(workout)
+        add_entry(category)
         commit_workout()
         
         return jsonify({'message': 'Exercise data saved successfully'})
-    
-def add_workout(table):
-    db.session.add(table)
-    
-def delete_exercise(table):
-    db.session.delete(table)
 
+
+# TODO: add this to create_app
 def commit_workout():
     db.session.commit()
     
