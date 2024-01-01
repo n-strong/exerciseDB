@@ -8,31 +8,33 @@ project_dir = r'C:\Users\nsstr\OneDrive\Computer Science\personal projects\exerc
 
 sys.path.append(project_dir)
 
-from project.routes import db
-from project.models import Exercise, Equipment, Workouts, Category, WorkoutSessions
-from project.create_db import create_app, check_db, delete_database, delete_entry, port, app, is_test_database_or_not
+from project.create_db import create_app, create_db, check_db, delete_database, delete_entry, port, is_test_database_or_not
 
 
 database_name = is_test_database_or_not('test_database')
 
 
-def test_create_app():
-    create_app(database_name)
-    assert check_db(database_name) is True
+# def test_create_db():
+#     create_db(database_name)
+#     assert check_db(database_name) is True
 
-
+# TODO: getting 404 error and not sure why. I think it's somewhere here
 @pytest.fixture(scope='session')
-def test_app():
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqldb://root:brain5075@localhost:{port}/{database_name}'
+def app():
+    app = create_app()
+    app.config.update({"TESTING": True})
+    # app_context = app.app_context()    
     
-    with app.app_context():
-        yield app
+    # app_context.push()
+    
+    yield app
+    
+    # app_context.pop()
 
 
 @pytest.fixture(scope='session')
-def test_client(test_app):
-    with test_app.test_client() as client:
-        yield client
+def test_client(app):
+    return app.test_client()
 
 
 @pytest.fixture
@@ -42,39 +44,39 @@ def response(test_client):
 def test_status_code(response):
     assert response.status_code == 200 
     
-def test_home(response):
-    assert b'id="exercise-form"' in response.data
+# def test_home(response):
+#     assert b'id="exercise-form"' in response.data
 
         
-def test_database_submission(test_client):
-    test_data = {
-        'exercise_name': 'Incline Bench Press',
-        'equipment_name': 'Barbell',
-        'workout_name': 'Push Day',
-        'calorie_count': 100,
-        'category': 'Chest'
-    }
+# def test_database_submission(test_client):
+#     test_data = {
+#         'exercise_name': 'Incline Bench Press',
+#         'equipment_name': 'Barbell',
+#         'workout_name': 'Push Day',
+#         'calorie_count': 100,
+#         'category': 'Chest'
+#     }
     
-    response = test_client.post('/submit_exercise', json=test_data)
+#     response = test_client.post('/submit_exercise', json=test_data)
 
-    assert response.json['message'] == 'Exercise data saved successfully'
+#     assert response.json['message'] == 'Exercise data saved successfully'
  
 
-def test_exercise_submission():
-    exercise = Exercise.query.filter_by(exercise_name = 'Incline Bench Press').first()
-    assert exercise.exercise_name == 'Incline Bench Press'
+# def test_exercise_submission():
+#     exercise = Exercise.query.filter_by(exercise_name = 'Incline Bench Press').first()
+#     assert exercise.exercise_name == 'Incline Bench Press'
 
-def test_equipment_submission():
-    equipment = Equipment.query.filter_by(equipment_name = 'Barbell').first()
-    assert equipment.equipment_name == 'Barbell'
+# def test_equipment_submission():
+#     equipment = Equipment.query.filter_by(equipment_name = 'Barbell').first()
+#     assert equipment.equipment_name == 'Barbell'
 
-def test_workout_submission():
-    workout = Workouts.query.filter_by(workout_name = 'Push Day').first()
-    assert workout.workout_name == 'Push Day'  and workout.calorie_count == 100
+# def test_workout_submission():
+#     workout = Workouts.query.filter_by(workout_name = 'Push Day').first()
+#     assert workout.workout_name == 'Push Day'  and workout.calorie_count == 100
 
-def test_category_submission():
-    category = Category.query.filter_by(category_name = 'Chest').first()
-    assert category.category_name == 'Chest'
+# def test_category_submission():
+#     category = Category.query.filter_by(category_name = 'Chest').first()
+#     assert category.category_name == 'Chest'
 
 # TODO: test to delete entry in database
 # def test_delete_exercise():

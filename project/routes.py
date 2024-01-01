@@ -7,13 +7,10 @@ import sys
 project_dir = r'C:\Users\nsstr\OneDrive\Computer Science\personal projects\exerciseDB'
 sys.path.append(project_dir)
 
-from project.models import Workouts, Exercise, Equipment, Category
-
 # from project.association import Workouts_have_Exercises, Exercises_have_Equipment, Exercises_have_Categories
 
-from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy
 
-from project.database import db as db
 
 from project.create_db import create_app, check_db, app, database_name, add_entry
 
@@ -30,17 +27,17 @@ def submit_exercise():
         data = request.get_json()
 
         #create new entries
-        exercise = Exercise(exercise_name=data['exercise_name'])
-        equipment = Equipment(equipment_name=data['equipment_name'])
-        workout = Workouts(workout_name=data['workout_name'], calorie_count=data['calorie_count'])
-        category = Category(category_name=data['category'])
+        exercise = ['Exercise', 'exercise_name', data['exercise_name']]
+        equipment = ['Equipment', 'equipment_name', data['equipment_name']]
+        workout = ['Workout', ['workout_name', 'calorie_count'], [data['workout_name'], data['calorie_count']]]
+        category = ['Category', 'category_name', data['category_name']]
     
         # add entities to database
-        add_entry(exercise)      
-        add_entry(equipment)
-        add_entry(workout)
-        add_entry(category)
-        commit_workout()
+        add_entry(*exercise)      
+        add_entry(*equipment)
+        add_entry(*workout)
+        add_entry(*category)
+        
         
         return jsonify({'message': 'Exercise data saved successfully'})
 
