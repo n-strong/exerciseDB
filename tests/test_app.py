@@ -18,24 +18,23 @@ database_name = is_test_database_or_not('test_database')
 #     create_db(database_name)
 #     assert check_db(database_name) is True
 
-# TODO: getting 404 error and not sure why. I think it's somewhere here
+# TODO: getting 404 error and not sure why. I think it's somewhere herer
 @pytest.fixture(scope='session')
 def app():
     app = create_app()
-    app.config.update({"TESTING": True})
+    app.config['TESTING'] = True
     # app_context = app.app_context()    
     
     # app_context.push()
-    
-    yield app
+    with app.app_context():
+        yield app
     
     # app_context.pop()
 
-
 @pytest.fixture(scope='session')
 def test_client(app):
-    return app.test_client()
-
+    with app.test_client() as client:
+        yield client
 
 @pytest.fixture
 def response(test_client):

@@ -12,10 +12,12 @@ sys.path.append(project_dir)
 # from flask_sqlalchemy import SQLAlchemy
 
 
-from project.create_db import create_app, check_db, app, database_name, add_entry
+from project.create_db import create_db, check_db, create_app, database_name, add_entry
 
-if not check_db(database_name):
-    create_app(database_name)
+# if not check_db(database_name):
+    # create_app(database_name)
+
+app = create_app()
 
 @app.route('/')
 def exercise_form():
@@ -42,9 +44,9 @@ def submit_exercise():
         return jsonify({'message': 'Exercise data saved successfully'})
 
 
-# TODO: add this to create_app
-def commit_workout():
-    db.session.commit()
+# # TODO: add this to create_app
+# def commit_workout():
+#     db.session.commit()
     
 if __name__ == '__main__':
     app.run(port=3309, debug=True)
